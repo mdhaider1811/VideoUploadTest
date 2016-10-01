@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "VimeoNetworking.h"
 
 @interface AppDelegate ()
 

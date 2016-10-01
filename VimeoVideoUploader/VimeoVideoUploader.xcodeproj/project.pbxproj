@@ -270,6 +270,7 @@
 				1C8276C01D9E91170089D101 /* Assets.xcassets */,
 				1C8276C21D9E91170089D101 /* LaunchScreen.storyboard */,
 				1C8276C51D9E91170089D101 /* Info.plist */,
+				1C8277911D9E9B400089D101 /* VimeoVideoUploader-Bridging-Header.h */,
 				1C8276B41D9E91170089D101 /* Supporting Files */,
 			);
 			path = VimeoVideoUploader;
@@ -314,7 +315,6 @@
 			children = (
 				1C8277921D9E9B400089D101 /* FirstViewController.swift */,
 				1C8277931D9E9B400089D101 /* FirstViewController.xib */,
-				1C8277911D9E9B400089D101 /* VimeoVideoUploader-Bridging-Header.h */,
 			);
 			name = FirstViewController;
 			sourceTree = "<group>";

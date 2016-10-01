@@ -26,5 +26,12 @@
     // Dispose of any resources that can be recreated.
 }
 
+#pragma mark - Actions
+
+- (IBAction)btnPressed:(id)sender
+{
+    FirstViewController  *controller = [[FirstViewController alloc] init];
+    [self.navigationController pushViewController:controller animated:YES];
+}
 
 @end
