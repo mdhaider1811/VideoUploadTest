@@ -28,10 +28,59 @@ import Foundation
 
 import AFNetworking
 
+typealias AuthTokenBlock = () -> String?
+
 /** `VimeoSessionManager` handles networking and serialization for raw HTTP requests.  It is a direct subclass of `AFHTTPSessionManager` and it's designed to be used internally by `VimeoClient`.  For the majority of purposes, it would be better to use `VimeoClient` and a `Request` object to better encapsulate this logic, since the latter provides richer functionality overall.
  */
 final public class VimeoSessionManager: AFHTTPSessionManager
-{    
+{
+    static func defaultSessionManager(authToken authToken: String) -> VimeoSessionManager
+    {
+        let sessionConfiguration = NSURLSessionConfiguration.defaultSessionConfiguration()
+        
+        return VimeoSessionManager(sessionConfiguration: sessionConfiguration, authToken: authToken)
+    }
+    
+    static func defaultSessionManager(authTokenBlock authTokenBlock: AuthTokenBlock) -> VimeoSessionManager
+    {
+        let sessionConfiguration = NSURLSessionConfiguration.defaultSessionConfiguration()
+        
+        return VimeoSessionManager(sessionConfiguration: sessionConfiguration, authTokenBlock: authTokenBlock)
+    }
+    
+    // MARK: - Background Session Initialization
+    
+    static func backgroundSessionManager(identifier identifier: String, authToken: String) -> VimeoSessionManager
+    {
+        let sessionConfiguration = NSURLSessionConfiguration.backgroundSessionConfigurationWithIdentifier(identifier)
+        
+        return VimeoSessionManager(sessionConfiguration: sessionConfiguration, authToken: authToken)
+    }
+    
+    static func backgroundSessionManager(identifier identifier: String, authTokenBlock: AuthTokenBlock) -> VimeoSessionManager
+    {
+        let sessionConfiguration = NSURLSessionConfiguration.backgroundSessionConfigurationWithIdentifier(identifier)
+        
+        return VimeoSessionManager(sessionConfiguration: sessionConfiguration, authTokenBlock: authTokenBlock)
+    }
+    
+    // MARK: Initialization
+    
+    convenience init(sessionConfiguration: NSURLSessionConfiguration, authToken: String)
+    {
+        self.init(sessionConfiguration: sessionConfiguration, authTokenBlock: { () -> String in
+            return authToken
+        })
+    }
+    
+    init(sessionConfiguration: NSURLSessionConfiguration, authTokenBlock: AuthTokenBlock)
+    {
+        super.init(baseURL: VimeoBaseURLString, sessionConfiguration: sessionConfiguration)
+        
+        self.requestSerializer = VimeoRequestSerializer(accessTokenProvider: authTokenBlock)
+        self.responseSerializer = VimeoResponseSerializer()
+    }
+    
     // MARK: Initialization
     
     /**
